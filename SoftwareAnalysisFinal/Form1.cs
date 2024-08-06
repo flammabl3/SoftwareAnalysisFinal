@@ -164,16 +164,34 @@ namespace SoftwareAnalysisFinal
             worksheet.Cells.Clear();
             worksheet.Cells[1, 1].LoadFromDataTable(dataTable, true);
             dataTable = makeDataTable(worksheet);
+            package.Save();
         }
 
-        private void add()
+        private void add(DataRow row, ExcelWorksheet worksheet)
         {
+            DataTable dataTable = row.Table;
+            dataTable.Rows.Add(row);
+
+            worksheet.Cells.Clear();
+            worksheet.Cells[1, 1].LoadFromDataTable(dataTable, true);
+            dataTable= makeDataTable(worksheet);
+            package.Save();
 
         }
 
         private void update()
         {
 
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            add(null, null);
         }
     }
 }
