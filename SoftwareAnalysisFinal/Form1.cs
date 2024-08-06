@@ -142,7 +142,7 @@ namespace SoftwareAnalysisFinal
             DataRowView selectedRow = comboBox1.SelectedItem as DataRowView;
             if (selectedRow != null)
             {
-                delete(selectedRow.Row);
+                delete(selectedRow.Row, workbook.Worksheets["RentalEquipment"]);
 
                 package.Save();
 
@@ -154,13 +154,12 @@ namespace SoftwareAnalysisFinal
             }
         }
 
-        private void delete(DataRow row)
+        private void delete(DataRow row, ExcelWorksheet worksheet)
         {
             DataTable dataTable = row.Table;
             dataTable.Rows.Remove(row);
             dataTable.Columns.Remove("DisplayColumn");
 
-            ExcelWorksheet worksheet = workbook.Worksheets["RentalEquipment"];
             worksheet.Cells.Clear();
             worksheet.Cells[1, 1].LoadFromDataTable(dataTable, true);
             dataTable = makeDataTable(worksheet);
@@ -172,6 +171,11 @@ namespace SoftwareAnalysisFinal
         }
 
         private void update()
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
         {
 
         }
