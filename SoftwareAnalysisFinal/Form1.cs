@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using OfficeOpenXml;
 using System.Reflection;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Text.RegularExpressions;
 
 /* Author: Harry Jung
  * Program breakdown:
@@ -45,7 +46,6 @@ namespace SoftwareAnalysisFinal
             package = new ExcelPackage(xlsxFile);
             workbook = package.Workbook;
 
-            tabControl1.SelectedIndex = 0;
         }
 
         //control pages with tabControl1. Load a different worksheet from the xlsx depending on what tab is loaded.
@@ -169,9 +169,15 @@ namespace SoftwareAnalysisFinal
             package.Save();
         }
 
-        private void add()
+        private void add(DataRow row, ExcelWorksheet worksheet)
         {
+            DataTable dataTable = row.Table;
+            dataTable.Rows.Add(row);
 
+            worksheet.Cells.Clear();
+            worksheet.Cells[1, 1].LoadFromDataTable(dataTable, true);
+            dataTable = makeDataTable(worksheet);
+            package.Save();
         }
 
         private void update()
@@ -179,15 +185,118 @@ namespace SoftwareAnalysisFinal
 
         }
 
-        private void label2_Click(object sender, EventArgs e)
+        private void addClientButton_Click(object sender, EventArgs e)
         {
+            ACError.Text = "";
+            ACConfirm.Text = "";
 
+           //make a new row and add it to excel. Trim all strings and validate.
+           string last_name = ACBox1.Text.Trim();
+            string first_name = ACBox2.Text.Trim();
+            string c_phone = ACBox3.Text.Trim();
+            string email = ACBox4.Text.Trim();
+
+            if (last_name == "")
+            {
+                ACError.Text = "Error: last name needed.";
+                return;
+            }
+
+            else if (Regex.IsMatch(last_name, @"[^a-zA-Z\-]"))
+            {
+                ACError.Text = "Error: last name contains invalid characters.";
+                return;
+            }
+
+            else if (first_name == "")
+            {
+                ACError.Text = "Error: first name needed.";
+                return;
+            }
+
+            // contains nonalpha
+            else if (Regex.IsMatch(first_name, @"[^a-zA-Z\-]"))
+            {
+                ACError.Text = "Error: first name contains invalid characters.";
+                return;
+            }
+
+            else if (c_phone == "")
+            {
+                ACError.Text = "Error: phone number needed.";
+                return;
+            }
+
+            // contains nonnumeric
+            else if (Regex.IsMatch(c_phone, @"[^0-9()\-\s]"))
+            {
+                ACError.Text = "Error: phone number contains invalid characters.";
+                return;
+            }
+
+            else if (email == "")
+            {
+                ACError.Text = "Error: email needed.";
+                return;
+            }
+
+            else if (Regex.IsMatch(email, @"[^a-zA-Z0-9._%+-@]") || Regex.IsMatch(email, @"^(?!.*[@.]).*$"))
+            {
+                ACError.Text = "Error: email contains invalid characters.";
+                return;
+            }
+
+            int largest = 0;
+            foreach (DataRow r in dataTable.Rows)
+            {
+                if (r["customer_id"] == DBNull.Value)
+                    continue;
+
+                int currentCategoryId = Convert.ToInt32(r["customer_id"]);
+
+                if (currentCategoryId > largest)
+                {
+                    largest = currentCategoryId;
+                }
+            }
+
+            DataRow row = dataTable.NewRow();
+            row["customer_id"] = largest + 1;
+            row["last_name"] = last_name;
+            row["first_name"] = first_name;
+            row["contact_phone"] = c_phone;
+            row["e-mail"] = email;
+
+
+            //use filterExpression to search for duplicates!
+            string filterExpression = $"last_name = '{last_name}' AND " +
+                           $"first_name = '{first_name}' AND " +
+                           $"contact_phone = '{c_phone}' AND " +
+                           $"[e-mail] = '{email}'";
+
+            DataRow[] matchingRows = dataTable.Select(filterExpression);
+
+            if (matchingRows.Length > 0)
+            {
+                ACError.Text = "Duplicate customer entry.";
+                return;
+            }
+
+            ACError.Text = "";
+            ACConfirm.Text = "Added Successfully!";
+            add(row, workbook.Worksheets["CustomerInformation"]);
+
+            ACBox1.Text = "";
+            ACBox2.Text = "";
+            ACBox3.Text = "";
+            ACBox4.Text = "";
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        // force call event handler for tab check when the form loads.
+        private void Form1_Load(object sender, EventArgs e)
         {
-
-           
+            tabControl1.SelectedIndex = 0;
+            tabControl1_SelectedIndexChanged(tabControl1, EventArgs.Empty);
         }
     }
 }
