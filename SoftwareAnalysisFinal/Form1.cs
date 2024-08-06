@@ -73,6 +73,7 @@ namespace SoftwareAnalysisFinal
             } else if (tabControl1.SelectedTab == AddClient)
             {
                 dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
+
             }
             else if (tabControl1.SelectedTab == DisplayEquipment || tabControl1.SelectedTab == AddRentalItems)
             {
@@ -142,9 +143,9 @@ namespace SoftwareAnalysisFinal
             DataRowView selectedRow = comboBox1.SelectedItem as DataRowView;
             if (selectedRow != null)
             {
+                
                 delete(selectedRow.Row, workbook.Worksheets["RentalEquipment"]);
-
-                package.Save();
+                comboBox1.DisplayMember = "DisplayColumn";
 
                 selectedRow = comboBox1.SelectedItem as DataRowView;
                 if (selectedRow != null)
@@ -158,11 +159,14 @@ namespace SoftwareAnalysisFinal
         {
             DataTable dataTable = row.Table;
             dataTable.Rows.Remove(row);
-            dataTable.Columns.Remove("DisplayColumn");
+            if (dataTable.Columns["DisplayColumn"] != null)
+                dataTable.Columns.Remove("DisplayColumn");
 
             worksheet.Cells.Clear();
             worksheet.Cells[1, 1].LoadFromDataTable(dataTable, true);
             dataTable = makeDataTable(worksheet);
+
+            package.Save();
         }
 
         private void add()
@@ -178,6 +182,12 @@ namespace SoftwareAnalysisFinal
         private void label2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+           
         }
     }
 }
