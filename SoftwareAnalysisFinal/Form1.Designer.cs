@@ -30,6 +30,8 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.AddEquipment = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.DeleteEquipment = new System.Windows.Forms.TabPage();
             this.button1 = new System.Windows.Forms.Button();
@@ -40,16 +42,28 @@
             this.label2 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.AddClient = new System.Windows.Forms.TabPage();
+            this.addClientButton = new System.Windows.Forms.Button();
+            this.ACLabel4 = new System.Windows.Forms.Label();
+            this.ACBox4 = new System.Windows.Forms.TextBox();
+            this.ACLabel3 = new System.Windows.Forms.Label();
+            this.ACLabel2 = new System.Windows.Forms.Label();
+            this.ACLabel1 = new System.Windows.Forms.Label();
+            this.ACBox3 = new System.Windows.Forms.TextBox();
+            this.ACBox2 = new System.Windows.Forms.TextBox();
+            this.ACBox1 = new System.Windows.Forms.TextBox();
+            this.addClientLabel = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.DisplayEquipment = new System.Windows.Forms.TabPage();
             this.DisplayAllClients = new System.Windows.Forms.TabPage();
             this.AddRentalItems = new System.Windows.Forms.TabPage();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.label1 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.ACError = new System.Windows.Forms.Label();
+            this.ACConfirm = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.AddEquipment.SuspendLayout();
-            this.DeleteEquipment.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.DeleteEquipment.SuspendLayout();
+            this.AddClient.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -80,6 +94,27 @@
             this.AddEquipment.TabIndex = 2;
             this.AddEquipment.Text = "Add Equipment";
             this.AddEquipment.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.LightBlue;
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Location = new System.Drawing.Point(1, 1);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(676, 40);
+            this.panel1.TabIndex = 11;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.LightBlue;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(261, 12);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(175, 26);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Add Equipment";
             // 
             // textBox1
             // 
@@ -160,7 +195,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.label2.BackColor = System.Drawing.Color.LightBlue;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(272, 14);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
@@ -168,11 +203,10 @@
             this.label2.Size = new System.Drawing.Size(202, 26);
             this.label2.TabIndex = 1;
             this.label2.Text = "Delete Equipment";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // panel2
             // 
-            this.panel2.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.panel2.BackColor = System.Drawing.Color.LightBlue;
             this.panel2.Location = new System.Drawing.Point(1, 2);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(676, 40);
@@ -180,6 +214,19 @@
             // 
             // AddClient
             // 
+            this.AddClient.Controls.Add(this.ACConfirm);
+            this.AddClient.Controls.Add(this.ACError);
+            this.AddClient.Controls.Add(this.addClientButton);
+            this.AddClient.Controls.Add(this.ACLabel4);
+            this.AddClient.Controls.Add(this.ACBox4);
+            this.AddClient.Controls.Add(this.ACLabel3);
+            this.AddClient.Controls.Add(this.ACLabel2);
+            this.AddClient.Controls.Add(this.ACLabel1);
+            this.AddClient.Controls.Add(this.ACBox3);
+            this.AddClient.Controls.Add(this.ACBox2);
+            this.AddClient.Controls.Add(this.ACBox1);
+            this.AddClient.Controls.Add(this.addClientLabel);
+            this.AddClient.Controls.Add(this.panel3);
             this.AddClient.Location = new System.Drawing.Point(4, 22);
             this.AddClient.Margin = new System.Windows.Forms.Padding(2);
             this.AddClient.Name = "AddClient";
@@ -188,6 +235,100 @@
             this.AddClient.TabIndex = 3;
             this.AddClient.Text = "Add Client";
             this.AddClient.UseVisualStyleBackColor = true;
+            // 
+            // addClientButton
+            // 
+            this.addClientButton.Location = new System.Drawing.Point(279, 214);
+            this.addClientButton.Name = "addClientButton";
+            this.addClientButton.Size = new System.Drawing.Size(75, 23);
+            this.addClientButton.TabIndex = 22;
+            this.addClientButton.Text = "Add Client";
+            this.addClientButton.UseVisualStyleBackColor = true;
+            this.addClientButton.Click += new System.EventHandler(this.addClientButton_Click);
+            // 
+            // ACLabel4
+            // 
+            this.ACLabel4.AutoSize = true;
+            this.ACLabel4.Location = new System.Drawing.Point(273, 160);
+            this.ACLabel4.Name = "ACLabel4";
+            this.ACLabel4.Size = new System.Drawing.Size(32, 13);
+            this.ACLabel4.TabIndex = 21;
+            this.ACLabel4.Text = "Email";
+            // 
+            // ACBox4
+            // 
+            this.ACBox4.Location = new System.Drawing.Point(322, 157);
+            this.ACBox4.Name = "ACBox4";
+            this.ACBox4.Size = new System.Drawing.Size(228, 20);
+            this.ACBox4.TabIndex = 20;
+            // 
+            // ACLabel3
+            // 
+            this.ACLabel3.AutoSize = true;
+            this.ACLabel3.Location = new System.Drawing.Point(227, 132);
+            this.ACLabel3.Name = "ACLabel3";
+            this.ACLabel3.Size = new System.Drawing.Size(78, 13);
+            this.ACLabel3.TabIndex = 19;
+            this.ACLabel3.Text = "Phone Number";
+            // 
+            // ACLabel2
+            // 
+            this.ACLabel2.AutoSize = true;
+            this.ACLabel2.Location = new System.Drawing.Point(251, 106);
+            this.ACLabel2.Name = "ACLabel2";
+            this.ACLabel2.Size = new System.Drawing.Size(57, 13);
+            this.ACLabel2.TabIndex = 18;
+            this.ACLabel2.Text = "First Name";
+            // 
+            // ACLabel1
+            // 
+            this.ACLabel1.AutoSize = true;
+            this.ACLabel1.Location = new System.Drawing.Point(247, 80);
+            this.ACLabel1.Name = "ACLabel1";
+            this.ACLabel1.Size = new System.Drawing.Size(58, 13);
+            this.ACLabel1.TabIndex = 17;
+            this.ACLabel1.Text = "Last Name";
+            // 
+            // ACBox3
+            // 
+            this.ACBox3.Location = new System.Drawing.Point(322, 129);
+            this.ACBox3.Name = "ACBox3";
+            this.ACBox3.Size = new System.Drawing.Size(228, 20);
+            this.ACBox3.TabIndex = 14;
+            // 
+            // ACBox2
+            // 
+            this.ACBox2.Location = new System.Drawing.Point(322, 103);
+            this.ACBox2.Name = "ACBox2";
+            this.ACBox2.Size = new System.Drawing.Size(228, 20);
+            this.ACBox2.TabIndex = 13;
+            // 
+            // ACBox1
+            // 
+            this.ACBox1.Location = new System.Drawing.Point(322, 77);
+            this.ACBox1.Name = "ACBox1";
+            this.ACBox1.Size = new System.Drawing.Size(228, 20);
+            this.ACBox1.TabIndex = 12;
+            // 
+            // addClientLabel
+            // 
+            this.addClientLabel.AutoSize = true;
+            this.addClientLabel.BackColor = System.Drawing.Color.LightBlue;
+            this.addClientLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addClientLabel.Location = new System.Drawing.Point(274, 17);
+            this.addClientLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.addClientLabel.Name = "addClientLabel";
+            this.addClientLabel.Size = new System.Drawing.Size(123, 26);
+            this.addClientLabel.TabIndex = 10;
+            this.addClientLabel.Text = "Add Client";
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.LightBlue;
+            this.panel3.Location = new System.Drawing.Point(3, 5);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(676, 40);
+            this.panel3.TabIndex = 11;
             // 
             // DisplayEquipment
             // 
@@ -219,43 +360,43 @@
             this.AddRentalItems.Text = "Add Rental Items";
             this.AddRentalItems.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // ACError
             // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.DeepSkyBlue;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(261, 12);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(175, 26);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Add Equipment";
+            this.ACError.AutoSize = true;
+            this.ACError.ForeColor = System.Drawing.Color.Red;
+            this.ACError.Location = new System.Drawing.Point(279, 188);
+            this.ACError.Name = "ACError";
+            this.ACError.Size = new System.Drawing.Size(0, 7);
+            this.ACError.TabIndex = 23;
             // 
-            // panel1
+            // ACConfirm
             // 
-            this.panel1.BackColor = System.Drawing.Color.DeepSkyBlue;
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(1, 1);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(676, 40);
-            this.panel1.TabIndex = 11;
+            this.ACConfirm.AutoSize = true;
+            this.ACConfirm.ForeColor = System.Drawing.Color.MediumSeaGreen;
+            this.ACConfirm.Location = new System.Drawing.Point(305, 244);
+            this.ACConfirm.Name = "ACConfirm";
+            this.ACConfirm.Size = new System.Drawing.Size(0, 7);
+            this.ACConfirm.TabIndex = 24;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(686, 384);
+            this.ClientSize = new System.Drawing.Size(688, 340);
             this.Controls.Add(this.tabControl1);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.AddEquipment.ResumeLayout(false);
             this.AddEquipment.PerformLayout();
-            this.DeleteEquipment.ResumeLayout(false);
-            this.DeleteEquipment.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.DeleteEquipment.ResumeLayout(false);
+            this.DeleteEquipment.PerformLayout();
+            this.AddClient.ResumeLayout(false);
+            this.AddClient.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -280,6 +421,19 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label addClientLabel;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.TextBox ACBox3;
+        private System.Windows.Forms.TextBox ACBox2;
+        private System.Windows.Forms.TextBox ACBox1;
+        private System.Windows.Forms.Label ACLabel4;
+        private System.Windows.Forms.TextBox ACBox4;
+        private System.Windows.Forms.Label ACLabel3;
+        private System.Windows.Forms.Label ACLabel2;
+        private System.Windows.Forms.Label ACLabel1;
+        private System.Windows.Forms.Button addClientButton;
+        private System.Windows.Forms.Label ACError;
+        private System.Windows.Forms.Label ACConfirm;
     }
 }
 
