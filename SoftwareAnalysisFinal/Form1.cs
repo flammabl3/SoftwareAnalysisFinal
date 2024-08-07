@@ -54,6 +54,31 @@ namespace SoftwareAnalysisFinal
             if (tabControl1.SelectedTab == AddEquipment)
             {
                 dataTable = makeDataTable(workbook.Worksheets["RentalEquipment"]);
+
+                comboBox2.DisplayMember = "category_id";
+                comboBox2.ValueMember = "category_id";
+                comboBox2.DataSource = dataTable;
+
+                comboBox3.DisplayMember = "daily_rate";
+                comboBox3.ValueMember = "daily_rate";
+                comboBox3.DataSource = dataTable;
+
+            }
+            else if (tabControl1.SelectedTab == AddRentalItems)
+            {
+                dataTable = makeDataTable(workbook.Worksheets["RentalEquipment"]);
+                if (dataTable.Rows.Count == 0)
+                {
+                    return;
+                }
+                //add a new column to show the name and equipment id in the combobox.
+                dataTable.Columns.Add("DisplayColumn", typeof(string), "name + ' (' + Convert(equipment_id, 'System.String') + ')'");
+
+                comboBox5.DisplayMember = "DisplayColumn";
+                comboBox5.ValueMember = "name";
+
+                comboBox5.DataSource = dataTable;
+
             }
             else if (tabControl1.SelectedTab == DeleteEquipment)
             {
@@ -133,6 +158,7 @@ namespace SoftwareAnalysisFinal
         }
 
 
+
         // The delete button. We take the selected row from the combo box, and then remove it from the current datatable. Then we get the worksheet again, clear it
         //replace the values, and update the datatable
         //then save back to the xlsx and update the combobox.
@@ -165,8 +191,15 @@ namespace SoftwareAnalysisFinal
             dataTable = makeDataTable(worksheet);
         }
 
-        private void add()
+        private void add(DataRow row, ExcelWorksheet worksheet)
         {
+            DataTable dataTable = row.Table;
+            dataTable.Rows.Add(row);
+
+            worksheet.Cells.Clear();
+            worksheet.Cells[1, 1].LoadFromDataTable(dataTable, true);
+            dataTable = makeDataTable(worksheet);
+            package.Save();
 
         }
 
@@ -178,6 +211,55 @@ namespace SoftwareAnalysisFinal
         private void label2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            
+            if (textBox1.Text == null) 
+            {
+                Console.WriteLine("error");
+            }
+            if (richTextBox2.Text == null) 
+            {
+                Console.WriteLine("error");
+            }
+            DataRow row = dataTable.NewRow();
+            row["name"] = textBox1.Text;
+            row["category_ID"]=comboBox2.Text;
+            row["description"]=richTextBox2.Text;
+            row["daily_rate"] = comboBox3.Text;
+            add(row, workbook.Worksheets["RentalEquipment"]);
+        }
+
+ 
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            tabControl1.SelectedIndex = 0;
+            tabControl1_SelectedIndexChanged(tabControl1, EventArgs.Empty);
+        }
+
+        private void AddEquipment_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DataRowView selectedRow = comboBox5.SelectedItem as DataRowView;
+
+            if (selectedRow != null)
+            {
+                richTextBox3.Text = selectedRow["description"].ToString();
+                richTextBox4.Text = selectedRow["daily_rate"].ToString();
+            }
+            
         }
     }
 }
