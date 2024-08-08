@@ -261,5 +261,15 @@ namespace SoftwareAnalysisFinal
             }
             
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            DataRow row = dataTable.NewRow();
+            row["equipment_id"] = comboBox5.Text;
+            row["rental_date"] = dateTimePicker1.Text;
+            row["return_date"] = dateTimePicker2.Text;
+            row["cost"] = comboBox3.Text;
+            add(row, workbook.Worksheets["RentalInformation"]);
+        }
     }
 }

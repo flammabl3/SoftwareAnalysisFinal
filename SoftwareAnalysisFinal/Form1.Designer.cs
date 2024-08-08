@@ -53,16 +53,20 @@
             this.DisplayEquipment = new System.Windows.Forms.TabPage();
             this.DisplayAllClients = new System.Windows.Forms.TabPage();
             this.AddRentalItems = new System.Windows.Forms.TabPage();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.button3 = new System.Windows.Forms.Button();
+            this.richTextBox4 = new System.Windows.Forms.RichTextBox();
+            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
+            this.comboBox5 = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.comboBox5 = new System.Windows.Forms.ComboBox();
-            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
-            this.richTextBox4 = new System.Windows.Forms.RichTextBox();
-            this.button3 = new System.Windows.Forms.Button();
+            this.label13 = new System.Windows.Forms.Label();
+            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.label14 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.AddEquipment.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -318,6 +322,10 @@
             // 
             // AddRentalItems
             // 
+            this.AddRentalItems.Controls.Add(this.label14);
+            this.AddRentalItems.Controls.Add(this.dateTimePicker2);
+            this.AddRentalItems.Controls.Add(this.label13);
+            this.AddRentalItems.Controls.Add(this.dateTimePicker1);
             this.AddRentalItems.Controls.Add(this.button3);
             this.AddRentalItems.Controls.Add(this.richTextBox4);
             this.AddRentalItems.Controls.Add(this.richTextBox3);
@@ -332,6 +340,48 @@
             this.AddRentalItems.TabIndex = 7;
             this.AddRentalItems.Text = "Add Rental Items";
             this.AddRentalItems.UseVisualStyleBackColor = true;
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Location = new System.Drawing.Point(515, 370);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(213, 26);
+            this.dateTimePicker1.TabIndex = 10;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(446, 460);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 29);
+            this.button3.TabIndex = 9;
+            this.button3.Text = "rent";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // richTextBox4
+            // 
+            this.richTextBox4.Location = new System.Drawing.Point(515, 314);
+            this.richTextBox4.Name = "richTextBox4";
+            this.richTextBox4.Size = new System.Drawing.Size(213, 33);
+            this.richTextBox4.TabIndex = 8;
+            this.richTextBox4.Text = "";
+            // 
+            // richTextBox3
+            // 
+            this.richTextBox3.Location = new System.Drawing.Point(515, 193);
+            this.richTextBox3.Name = "richTextBox3";
+            this.richTextBox3.Size = new System.Drawing.Size(213, 75);
+            this.richTextBox3.TabIndex = 7;
+            this.richTextBox3.Text = "";
+            // 
+            // comboBox5
+            // 
+            this.comboBox5.FormattingEnabled = true;
+            this.comboBox5.Location = new System.Drawing.Point(515, 130);
+            this.comboBox5.Name = "comboBox5";
+            this.comboBox5.Size = new System.Drawing.Size(213, 28);
+            this.comboBox5.TabIndex = 6;
+            this.comboBox5.SelectedIndexChanged += new System.EventHandler(this.comboBox5_SelectedIndexChanged);
             // 
             // label12
             // 
@@ -381,39 +431,30 @@
             this.label9.TabIndex = 1;
             this.label9.Text = "Add Rental Item";
             // 
-            // comboBox5
+            // label13
             // 
-            this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Location = new System.Drawing.Point(515, 130);
-            this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(213, 28);
-            this.comboBox5.TabIndex = 6;
-            this.comboBox5.SelectedIndexChanged += new System.EventHandler(this.comboBox5_SelectedIndexChanged);
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(287, 375);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(117, 20);
+            this.label13.TabIndex = 11;
+            this.label13.Text = "borowwed date";
             // 
-            // richTextBox3
+            // dateTimePicker2
             // 
-            this.richTextBox3.Location = new System.Drawing.Point(515, 193);
-            this.richTextBox3.Name = "richTextBox3";
-            this.richTextBox3.Size = new System.Drawing.Size(213, 75);
-            this.richTextBox3.TabIndex = 7;
-            this.richTextBox3.Text = "";
+            this.dateTimePicker2.Location = new System.Drawing.Point(515, 414);
+            this.dateTimePicker2.Name = "dateTimePicker2";
+            this.dateTimePicker2.Size = new System.Drawing.Size(213, 26);
+            this.dateTimePicker2.TabIndex = 12;
             // 
-            // richTextBox4
+            // label14
             // 
-            this.richTextBox4.Location = new System.Drawing.Point(515, 314);
-            this.richTextBox4.Name = "richTextBox4";
-            this.richTextBox4.Size = new System.Drawing.Size(213, 33);
-            this.richTextBox4.TabIndex = 8;
-            this.richTextBox4.Text = "";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(442, 405);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 29);
-            this.button3.TabIndex = 9;
-            this.button3.Text = "rent";
-            this.button3.UseVisualStyleBackColor = true;
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(287, 420);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(87, 20);
+            this.label14.TabIndex = 13;
+            this.label14.Text = "return date";
             // 
             // Form1
             // 
@@ -476,6 +517,10 @@
         private System.Windows.Forms.RichTextBox richTextBox3;
         private System.Windows.Forms.RichTextBox richTextBox4;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.DateTimePicker dateTimePicker2;
+        private System.Windows.Forms.Label label14;
     }
 }
 
