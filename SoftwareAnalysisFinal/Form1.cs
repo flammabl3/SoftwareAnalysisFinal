@@ -70,7 +70,8 @@ namespace SoftwareAnalysisFinal
                 comboBox1.ValueMember = "name";
 
                 comboBox1.DataSource = dataTable;
-            } else if (tabControl1.SelectedTab == AddClient)
+            }
+            else if (tabControl1.SelectedTab == AddClient)
             {
                 dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
 
@@ -84,7 +85,21 @@ namespace SoftwareAnalysisFinal
                 dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
                 dataTable = makeDataTable(workbook.Worksheets[3]);
             }
-
+            if (tabControl1.SelectedTab == DisplayEquipment)
+            {
+                dataTable = makeDataTable(workbook.Worksheets["RentalEquipment"]);
+                dataGridViewEquipment.DataSource = dataTable;
+            }
+            else if (tabControl1.SelectedTab == DisplayAllClients)
+            {
+                dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
+                dataGridViewClients.DataSource = dataTable;
+            }
+            if (tabControl1.SelectedTab == DisplayAllClients)
+            {
+                dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
+                dataGridViewClients.DataSource = dataTable;
+            }
         }
 
         //load all entries from an excel worksheet into a winforms DataTable.
@@ -143,7 +158,7 @@ namespace SoftwareAnalysisFinal
             DataRowView selectedRow = comboBox1.SelectedItem as DataRowView;
             if (selectedRow != null)
             {
-                
+
                 delete(selectedRow.Row, workbook.Worksheets["RentalEquipment"]);
                 comboBox1.DisplayMember = "DisplayColumn";
 
@@ -190,8 +205,8 @@ namespace SoftwareAnalysisFinal
             ACError.Text = "";
             ACConfirm.Text = "";
 
-           //make a new row and add it to excel. Trim all strings and validate.
-           string last_name = ACBox1.Text.Trim();
+            //make a new row and add it to excel. Trim all strings and validate.
+            string last_name = ACBox1.Text.Trim();
             string first_name = ACBox2.Text.Trim();
             string c_phone = ACBox3.Text.Trim();
             string email = ACBox4.Text.Trim();
@@ -291,6 +306,25 @@ namespace SoftwareAnalysisFinal
             ACBox3.Text = "";
             ACBox4.Text = "";
         }
+
+        private void btnRefreshEquipmentList_Click(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab == DisplayEquipment)
+            {
+                dataTable = makeDataTable(workbook.Worksheets["RentalEquipment"]);
+                dataGridViewEquipment.DataSource = dataTable;
+            }
+        }
+
+        private void btnRefreshClientList_Click(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab == DisplayAllClients)
+            {
+                dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
+                dataGridViewClients.DataSource = dataTable;
+            }
+        }
+
 
         // force call event handler for tab check when the form loads.
         private void Form1_Load(object sender, EventArgs e)
