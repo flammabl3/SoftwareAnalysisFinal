@@ -54,6 +54,31 @@ namespace SoftwareAnalysisFinal
             if (tabControl1.SelectedTab == AddEquipment)
             {
                 dataTable = makeDataTable(workbook.Worksheets["RentalEquipment"]);
+
+                comboBox2.DisplayMember = "category_id";
+                comboBox2.ValueMember = "category_id";
+                comboBox2.DataSource = dataTable;
+
+                comboBox3.DisplayMember = "daily_rate";
+                comboBox3.ValueMember = "daily_rate";
+                comboBox3.DataSource = dataTable;
+
+            }
+            else if (tabControl1.SelectedTab == AddRentalItems)
+            {
+                dataTable = makeDataTable(workbook.Worksheets["RentalEquipment"]);
+                if (dataTable.Rows.Count == 0)
+                {
+                    return;
+                }
+                //add a new column to show the name and equipment id in the combobox.
+                dataTable.Columns.Add("DisplayColumn", typeof(string), "name + ' (' + Convert(equipment_id, 'System.String') + ')'");
+
+                comboBox5.DisplayMember = "DisplayColumn";
+                comboBox5.ValueMember = "name";
+
+                comboBox5.DataSource = dataTable;
+
             }
             else if (tabControl1.SelectedTab == DeleteEquipment)
             {
@@ -70,7 +95,8 @@ namespace SoftwareAnalysisFinal
                 comboBox1.ValueMember = "name";
 
                 comboBox1.DataSource = dataTable;
-            } else if (tabControl1.SelectedTab == AddClient)
+            }
+            else if (tabControl1.SelectedTab == AddClient)
             {
                 dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
 
@@ -84,7 +110,21 @@ namespace SoftwareAnalysisFinal
                 dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
                 dataTable = makeDataTable(workbook.Worksheets[3]);
             }
-
+            if (tabControl1.SelectedTab == DisplayEquipment)
+            {
+                dataTable = makeDataTable(workbook.Worksheets["RentalEquipment"]);
+                dataGridViewEquipment.DataSource = dataTable;
+            }
+            else if (tabControl1.SelectedTab == DisplayAllClients)
+            {
+                dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
+                dataGridViewClients.DataSource = dataTable;
+            }
+            if (tabControl1.SelectedTab == DisplayAllClients)
+            {
+                dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
+                dataGridViewClients.DataSource = dataTable;
+            }
         }
 
         //load all entries from an excel worksheet into a winforms DataTable.
@@ -134,6 +174,7 @@ namespace SoftwareAnalysisFinal
         }
 
 
+
         // The delete button. We take the selected row from the combo box, and then remove it from the current datatable. Then we get the worksheet again, clear it
         //replace the values, and update the datatable
         //then save back to the xlsx and update the combobox.
@@ -143,7 +184,7 @@ namespace SoftwareAnalysisFinal
             DataRowView selectedRow = comboBox1.SelectedItem as DataRowView;
             if (selectedRow != null)
             {
-                
+
                 delete(selectedRow.Row, workbook.Worksheets["RentalEquipment"]);
                 comboBox1.DisplayMember = "DisplayColumn";
 
@@ -190,8 +231,8 @@ namespace SoftwareAnalysisFinal
             ACError.Text = "";
             ACConfirm.Text = "";
 
-           //make a new row and add it to excel. Trim all strings and validate.
-           string last_name = ACBox1.Text.Trim();
+            //make a new row and add it to excel. Trim all strings and validate.
+            string last_name = ACBox1.Text.Trim();
             string first_name = ACBox2.Text.Trim();
             string c_phone = ACBox3.Text.Trim();
             string email = ACBox4.Text.Trim();
@@ -292,11 +333,89 @@ namespace SoftwareAnalysisFinal
             ACBox4.Text = "";
         }
 
+        private void btnRefreshEquipmentList_Click(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab == DisplayEquipment)
+            {
+                dataTable = makeDataTable(workbook.Worksheets["RentalEquipment"]);
+                dataGridViewEquipment.DataSource = dataTable;
+            }
+        }
+
+        private void btnRefreshClientList_Click(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab == DisplayAllClients)
+            {
+                dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
+                dataGridViewClients.DataSource = dataTable;
+            }
+        }
+
+
         // force call event handler for tab check when the form loads.
         private void Form1_Load(object sender, EventArgs e)
         {
             tabControl1.SelectedIndex = 0;
             tabControl1_SelectedIndexChanged(tabControl1, EventArgs.Empty);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            
+            if (textBox1.Text == null) 
+            {
+                Console.WriteLine("error");
+            }
+            if (richTextBox2.Text == null) 
+            {
+                Console.WriteLine("error");
+            }
+            DataRow row = dataTable.NewRow();
+            row["name"] = textBox1.Text;
+            row["category_ID"]=comboBox2.Text;
+            row["description"]=richTextBox2.Text;
+            row["daily_rate"] = comboBox3.Text;
+            add(row, workbook.Worksheets["RentalEquipment"]);
+        }
+
+ 
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            tabControl1.SelectedIndex = 0;
+            tabControl1_SelectedIndexChanged(tabControl1, EventArgs.Empty);
+        }
+
+        private void AddEquipment_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DataRowView selectedRow = comboBox5.SelectedItem as DataRowView;
+
+            if (selectedRow != null)
+            {
+                richTextBox3.Text = selectedRow["description"].ToString();
+                richTextBox4.Text = selectedRow["daily_rate"].ToString();
+            }
+            
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            DataRow row = dataTable.NewRow();
+            row["equipment_id"] = comboBox5.Text;
+            row["rental_date"] = dateTimePicker1.Text;
+            row["return_date"] = dateTimePicker2.Text;
+            row["cost"] = comboBox3.Text;
+            add(row, workbook.Worksheets["RentalInformation"]);
         }
     }
 }
