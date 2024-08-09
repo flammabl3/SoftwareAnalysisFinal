@@ -12,6 +12,8 @@ using OfficeOpenXml;
 using System.Reflection;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Text.RegularExpressions;
+using System.Globalization;
+using System.Data.Odbc;
 
 /* Author: Harry Jung
  * Program breakdown:
@@ -29,6 +31,8 @@ namespace SoftwareAnalysisFinal
         ExcelPackage package;
         ExcelWorkbook workbook;
         DataTable dataTable;
+        DataTable dataTableAux;
+        DataTable dataTableClients;
         public Form1()
         {
             InitializeComponent();
@@ -53,11 +57,19 @@ namespace SoftwareAnalysisFinal
         {
             if (tabControl1.SelectedTab == AddEquipment)
             {
+                DACSuccess.Visible = false;
+                DACSuccess.Text = "";
+                DACError.Visible = false;
+                DACError.Text = "";
                 dataTable = makeDataTable(workbook.Worksheets["RentalEquipment"]);
 
-                comboBox2.DisplayMember = "category_id";
+                dataTableAux = makeDataTable(workbook.Worksheets["CategoryList"]);
+                dataTableAux.Columns.Add("DisplayColumn", typeof(string), "name + ' (' + Convert(category_id, 'System.String') + ')'");
+
+
+                comboBox2.DisplayMember = "DisplayColumn";
                 comboBox2.ValueMember = "category_id";
-                comboBox2.DataSource = dataTable;
+                comboBox2.DataSource = dataTableAux;
 
                 comboBox3.DisplayMember = "daily_rate";
                 comboBox3.ValueMember = "daily_rate";
@@ -66,18 +78,37 @@ namespace SoftwareAnalysisFinal
             }
             else if (tabControl1.SelectedTab == AddRentalItems)
             {
-                dataTable = makeDataTable(workbook.Worksheets["RentalEquipment"]);
+                rentalLabelCost.Visible = false;
+                timeError.Visible = false;
+
+                dataTable = makeDataTable(workbook.Worksheets["RentalInfo"]);
+                dataTableAux = makeDataTable(workbook.Worksheets["RentalEquipment"]);
+                dataTableClients = makeDataTable(workbook.Worksheets["CustomerInformation"]);
                 if (dataTable.Rows.Count == 0)
                 {
                     return;
                 }
                 //add a new column to show the name and equipment id in the combobox.
-                dataTable.Columns.Add("DisplayColumn", typeof(string), "name + ' (' + Convert(equipment_id, 'System.String') + ')'");
+                dataTableAux.Columns.Add("DisplayColumn", typeof(string), "name + ' (' + Convert(equipment_id, 'System.String') + ')'");
 
                 comboBox5.DisplayMember = "DisplayColumn";
-                comboBox5.ValueMember = "name";
+                comboBox5.ValueMember = "equipment_id";
+                comboBox5.DataSource = dataTableAux;
 
-                comboBox5.DataSource = dataTable;
+                comboBox1.DisplayMember = "rental_id";
+                comboBox1.ValueMember = "rental_id";
+                var distinctRentalIds = dataTable.AsEnumerable()
+                .Select(row => row.Field<string>("rental_id"))
+                .Distinct()
+                .ToList();
+
+                comboBox1.DataSource = distinctRentalIds;
+
+                dataTableClients.Columns.Add("DisplayColumn", typeof(string), "first_name + ' ' + last_name + ' (' + Convert(customer_id, 'System.String') + ')'");
+
+                comboBox4.DisplayMember = "DisplayColumn";
+                comboBox4.ValueMember = "customer_id";
+                comboBox4.DataSource = dataTableClients;
 
             }
             else if (tabControl1.SelectedTab == DeleteEquipment)
@@ -101,16 +132,7 @@ namespace SoftwareAnalysisFinal
                 dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
 
             }
-            else if (tabControl1.SelectedTab == DisplayEquipment || tabControl1.SelectedTab == AddRentalItems)
-            {
-                dataTable = makeDataTable(workbook.Worksheets["RentalEquipment"]);
-            }
-            else if (tabControl1.SelectedTab == DisplayAllClients)
-            {
-                dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
-                dataTable = makeDataTable(workbook.Worksheets[3]);
-            }
-            if (tabControl1.SelectedTab == DisplayEquipment)
+            else if (tabControl1.SelectedTab == DisplayEquipment)
             {
                 dataTable = makeDataTable(workbook.Worksheets["RentalEquipment"]);
                 dataGridViewEquipment.DataSource = dataTable;
@@ -120,11 +142,7 @@ namespace SoftwareAnalysisFinal
                 dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
                 dataGridViewClients.DataSource = dataTable;
             }
-            if (tabControl1.SelectedTab == DisplayAllClients)
-            {
-                dataTable = makeDataTable(workbook.Worksheets["CustomerInformation"]);
-                dataGridViewClients.DataSource = dataTable;
-            }
+            
         }
 
         //load all entries from an excel worksheet into a winforms DataTable.
@@ -184,7 +202,6 @@ namespace SoftwareAnalysisFinal
             DataRowView selectedRow = deleteEquipmentComboBox1.SelectedItem as DataRowView;
             if (selectedRow != null)
             {
-
                 delete(selectedRow.Row, workbook.Worksheets["RentalEquipment"]);
                 deleteEquipmentComboBox1.DisplayMember = "DisplayColumn";
 
@@ -221,10 +238,6 @@ namespace SoftwareAnalysisFinal
             package.Save();
         }
 
-        private void update()
-        {
-
-        }
 
         private void addClientButton_Click(object sender, EventArgs e)
         {
@@ -351,51 +364,55 @@ namespace SoftwareAnalysisFinal
             }
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
 
-        }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            
-            if (textBox1.Text == null) 
+            DACError.Visible = false;
+            DACSuccess.Visible = false;
+
+            if (textBox1.Text == "") 
             {
-                Console.WriteLine("error");
+                DACError.Visible = true;
+                DACError.Text = "Error: Enter a name for the item!";
+                return;
             }
-            if (richTextBox2.Text == null) 
+            else if (richTextBox2.Text == "") 
             {
-                Console.WriteLine("error");
+                DACError.Visible = true;
+                DACError.Text = "Error: Enter a description for the item!";
+                return;
             }
             DataRow row = dataTable.NewRow();
             row["name"] = textBox1.Text;
-            row["category_ID"]=comboBox2.Text;
+            row["category_ID"]=comboBox2.SelectedValue;
             row["description"]=richTextBox2.Text;
             row["daily_rate"] = comboBox3.Text;
+
+            string prefix = Convert.ToString(comboBox2.SelectedValue);
+
+            var filteredRows = dataTable.AsEnumerable()
+                                    .Where(r => r.Field<string>("equipment_id").StartsWith(prefix));
+            int maxValue = Convert.ToInt32(prefix + "0");
+            if (filteredRows.Any())
+                maxValue = filteredRows.Max(r => Convert.ToInt32(r.Field<string>("equipment_id")));
+
+            row["equipment_id"] = maxValue + 1;
+
             add(row, workbook.Worksheets["RentalEquipment"]);
+            DACSuccess.Visible = true;
+            DACSuccess.Text = "Success!";
+
+            textBox1.Clear();
+            richTextBox2.Clear();
         }
 
- 
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            tabControl1.SelectedIndex = 0;
-            tabControl1_SelectedIndexChanged(tabControl1, EventArgs.Empty);
-        }
-
-        private void AddEquipment_Click(object sender, EventArgs e)
-        {
-
-        }
 
         // force call event handler for tab check when the form loads.
         private void Form1_Load(object sender, EventArgs e)
         {
             tabControl1.SelectedIndex = 0;
             tabControl1_SelectedIndexChanged(tabControl1, EventArgs.Empty);
-        private void richTextBox2_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
@@ -405,19 +422,52 @@ namespace SoftwareAnalysisFinal
             if (selectedRow != null)
             {
                 richTextBox3.Text = selectedRow["description"].ToString();
-                richTextBox4.Text = selectedRow["daily_rate"].ToString();
             }
             
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            rentalLabelCost.Visible = false;
+            timeError.Visible = false;
+
             DataRow row = dataTable.NewRow();
-            row["equipment_id"] = comboBox5.Text;
-            row["rental_date"] = dateTimePicker1.Text;
-            row["return_date"] = dateTimePicker2.Text;
-            row["cost"] = comboBox3.Text;
-            add(row, workbook.Worksheets["RentalInformation"]);
+
+            DateTime thisDay = DateTime.Today;
+
+            row["rental_id"] = comboBox1.Text;
+            row["date"] = thisDay.ToString("yyyy-MM-dd");
+            row["customer_id"] = comboBox4.SelectedValue;
+            row["equipment_id"] = comboBox5.SelectedValue;
+
+            DateTime rentalDate = DateTime.ParseExact(dateTimePicker1.Text, "MMMM d, yyyy", CultureInfo.InvariantCulture);
+
+            row["rental_date"] = rentalDate.ToString("yyyy-MM-dd");
+
+            DateTime returnDate = DateTime.ParseExact(dateTimePicker2.Text, "MMMM d, yyyy", CultureInfo.InvariantCulture);
+
+            row["return_date"] = returnDate.ToString("yyyy-MM-dd");
+
+            TimeSpan difference = returnDate - rentalDate;
+            int daysDifference = (int)difference.TotalDays;
+            if (daysDifference < 0)
+            {
+                timeError.Visible = true;
+                return;
+            }
+            if (daysDifference == 0)
+                daysDifference++;
+
+            DataRow foundRow = dataTableAux.Select($"equipment_id = {Convert.ToInt32(comboBox5.SelectedValue)}").FirstOrDefault();
+            var cost = (Convert.ToDecimal(foundRow["daily_rate"]) * Convert.ToDecimal(daysDifference)).ToString("F2");
+
+            row["cost"] = cost;
+            add(row, workbook.Worksheets["RentalInfo"]);
+
+            rentalLabelCost.Visible = true;
+            rentalLabelCost.Text = $"Success! Rental added for ${cost}.";
+
+            richTextBox3.Clear();
         }
     }
 }
