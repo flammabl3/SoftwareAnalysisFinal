@@ -38,7 +38,7 @@ namespace SoftwareAnalysisFinal
             InitializeComponent();
 
             //use an OfficeOpenXml ExceLPackage object to open the xlsx file.
-            string filePath = @"../../data.xlsx";
+            string filePath = @"data.xlsx";
             FileInfo xlsxFile = new FileInfo(filePath);
             if (!File.Exists(filePath))
             {
@@ -467,7 +467,6 @@ namespace SoftwareAnalysisFinal
             rentalLabelCost.Visible = true;
             rentalLabelCost.Text = $"Success! Rental added for ${cost}.";
 
-            richTextBox3.Clear();
         }
     }
 }
