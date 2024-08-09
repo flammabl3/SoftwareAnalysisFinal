@@ -66,10 +66,10 @@ namespace SoftwareAnalysisFinal
                 //add a new column to show the name and equipment id in the combobox.
                 dataTable.Columns.Add("DisplayColumn", typeof(string), "name + ' (' + Convert(equipment_id, 'System.String') + ')'");
 
-                comboBox1.DisplayMember = "DisplayColumn";
-                comboBox1.ValueMember = "name";
+                deleteEquipmentComboBox1.DisplayMember = "DisplayColumn";
+                deleteEquipmentComboBox1.ValueMember = "name";
 
-                comboBox1.DataSource = dataTable;
+                deleteEquipmentComboBox1.DataSource = dataTable;
             }
             else if (tabControl1.SelectedTab == AddClient)
             {
@@ -140,11 +140,11 @@ namespace SoftwareAnalysisFinal
         //when we pick a piece of equipment, we update the description box with the data from that row.
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DataRowView selectedRow = comboBox1.SelectedItem as DataRowView;
+            DataRowView selectedRow = deleteEquipmentComboBox1.SelectedItem as DataRowView;
 
             if (selectedRow != null)
             {
-                richTextBox1.Text = selectedRow["description"].ToString();
+                deleteEquipmentRichTextBox1.Text = selectedRow["description"].ToString();
             }
         }
 
@@ -155,17 +155,17 @@ namespace SoftwareAnalysisFinal
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DataRowView selectedRow = comboBox1.SelectedItem as DataRowView;
+            DataRowView selectedRow = deleteEquipmentComboBox1.SelectedItem as DataRowView;
             if (selectedRow != null)
             {
 
                 delete(selectedRow.Row, workbook.Worksheets["RentalEquipment"]);
-                comboBox1.DisplayMember = "DisplayColumn";
+                deleteEquipmentComboBox1.DisplayMember = "DisplayColumn";
 
-                selectedRow = comboBox1.SelectedItem as DataRowView;
+                selectedRow = deleteEquipmentComboBox1.SelectedItem as DataRowView;
                 if (selectedRow != null)
                 {
-                    richTextBox1.Text = selectedRow["description"].ToString();
+                    deleteEquipmentRichTextBox1.Text = selectedRow["description"].ToString();
                 }
             }
         }
